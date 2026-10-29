@@ -4,9 +4,9 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from mypyproject.api import api_router
-from mypyproject.config import Settings, get_settings
-from mypyproject.resource.path import ensure_runtime_dirs
+from mywebproject.api import api_router
+from mywebproject.config import Settings, get_settings
+from mywebproject.resource.path import ensure_runtime_dirs
 
 
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -45,7 +45,7 @@ app = create_app()
 def main() -> None:
     settings = get_settings()
     uvicorn.run(
-        "mypyproject.main:app",
+        "mywebproject.main:app",
         host=settings.BACKEND_URL,
         port=settings.BACKEND_PORT,
         reload=settings.DEBUG,

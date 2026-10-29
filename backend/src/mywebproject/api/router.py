@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from mypyproject.schema.health import HealthResponse
+from mywebproject.schema.health import HealthResponse
 
 api_router = APIRouter()
 

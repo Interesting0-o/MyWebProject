@@ -1,4 +1,4 @@
-# MyWebProject
+# mywebproject
 
 Vue 3 + FastAPI 全栈项目，前端首页提供一个后端连接测试按钮。
 
@@ -13,7 +13,7 @@ Vue 3 + FastAPI 全栈项目，前端首页提供一个后端连接测试按钮�
 ```
 .
 ├── backend/                 # FastAPI 后端
-│   ├── src/mypyproject/
+│   ├── src/mywebproject/
 │   │   ├── api/             # 路由
 │   │   ├── resource/path.py # 基于 pathlib 的路径管理
 │   │   ├── schema/          # Pydantic 模型
@@ -43,7 +43,7 @@ cp .env.example .env
 ```bash
 cd backend
 uv sync
-uv run mypyproject
+uv run mywebproject
 ```
 
 后端默认运行在 `http://127.0.0.1:8000`：
@@ -70,5 +70,5 @@ yarn test:unit      # 单元测试
 yarn lint           # 代码检查
 
 # 后端
-uv run uvicorn mypyproject.main:app --reload  # 热重载启动
+uv run uvicorn mywebproject.main:app --reload  # 热重载启动
 ```
