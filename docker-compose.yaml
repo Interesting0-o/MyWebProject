@@ -5,7 +5,8 @@ services:
     ports:
       - '8000:8000'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       APP_NAME: ${APP_NAME}
       APP_VERSION: ${APP_VERSION}
@@ -13,14 +14,33 @@ services:
       DEBUG: ${DEBUG}
       BACKEND_PORT: ${BACKEND_PORT}
       CORS_ORIGINS: ${CORS_ORIGINS}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${DATABASE_URL:-mysql+aiomysql://root:change-me@db:3306/mywebproject}
   frontend:
     build:
       context: ./frontend
     ports:
-      - '5173:5173'
+      - '80:80'
+    environment:
+      BACKEND_API_URL: ${BACKEND_API_URL:-http://backend:8000}
+      NGINX_ENVSUBST_FILTER: ^BACKEND_API_URL$
   db:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PWD}
       MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mysqladmin ping -h 127.0.0.1 -uroot -p"$${MYSQL_ROOT_PASSWORD}" --silent',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+volumes:
+  mysql_data:
