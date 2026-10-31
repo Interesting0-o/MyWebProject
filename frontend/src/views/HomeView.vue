@@ -1,13 +1,23 @@
 <script setup>
+import { computed, ref } from 'vue'
 import PostList from '@/components/PostList.vue'
 import { site } from '@/config/site'
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 import { posts } from '@/data/posts'
 import { formatCompactDate } from '@/utils/format'
 
-usePageTitle()
+const PAGE_SIZE = 4
+
+useSeo()
 
 const latestDate = posts[0]?.date
+const visibleCount = ref(PAGE_SIZE)
+const visiblePosts = computed(() => posts.slice(0, visibleCount.value))
+const hasMore = computed(() => visibleCount.value < posts.length)
+
+function loadMore() {
+  visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, posts.length)
+}
 </script>
 
 <template>
@@ -37,7 +47,14 @@ const latestDate = posts[0]?.date
         <h2 class="section-title">最新文章</h2>
         <RouterLink class="section-link" :to="{ name: 'archive' }">全部归档 →</RouterLink>
       </div>
-      <PostList :posts="posts" />
+      <PostList :posts="visiblePosts" />
+
+      <div class="load-more">
+        <button v-if="hasMore" type="button" class="button button--ghost" @click="loadMore">
+          加载更多文章
+        </button>
+        <p class="load-more-meta">已显示 {{ visiblePosts.length }} / {{ posts.length }} 篇</p>
+      </div>
     </section>
   </div>
 </template>
@@ -92,5 +109,20 @@ const latestDate = posts[0]?.date
 
 .latest {
   padding-bottom: 1rem;
+}
+
+.load-more {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: center;
+  padding-block: 2rem;
+}
+
+.load-more-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  color: var(--color-text-faint);
 }
 </style>

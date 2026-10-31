@@ -1,8 +1,12 @@
 <script setup>
 import BackendTester from '@/components/BackendTester.vue'
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 
-usePageTitle(() => '服务状态')
+useSeo(() => ({
+  title: '服务状态',
+  description: '本站的后端健康检查页面。',
+  robots: 'noindex',
+}))
 </script>
 
 <template>

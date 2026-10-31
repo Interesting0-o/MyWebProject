@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import PostList from '@/components/PostList.vue'
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 import { getPostsByTag } from '@/data/posts'
 
 const route = useRoute()
@@ -10,7 +10,12 @@ const route = useRoute()
 const tag = computed(() => String(route.params.tag ?? ''))
 const tagPosts = computed(() => getPostsByTag(tag.value))
 
-usePageTitle(() => (tag.value ? `标签 · ${tag.value}` : '标签'))
+useSeo(() => ({
+  title: tag.value ? `标签 · ${tag.value}` : '标签',
+  description: `标签「${tag.value}」下共有 ${tagPosts.value.length} 篇文章。`,
+  keywords: [tag.value, '标签'],
+  path: route.path,
+}))
 </script>
 
 <template>

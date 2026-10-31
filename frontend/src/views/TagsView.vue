@@ -1,8 +1,12 @@
 <script setup>
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 import { allTags } from '@/data/posts'
 
-usePageTitle(() => '标签')
+useSeo(() => ({
+  title: '标签',
+  description: `共 ${allTags.length} 个标签，点击查看相关文章。`,
+  keywords: allTags.map((tag) => tag.name),
+}))
 </script>
 
 <template>

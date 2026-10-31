@@ -1,19 +1,26 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { withHeadingIds } from '@/utils/content'
+
+const props = defineProps({
   blocks: {
     type: Array,
     required: true,
   },
 })
+
+const renderBlocks = computed(() => withHeadingIds(props.blocks))
 </script>
 
 <template>
   <div class="prose">
-    <template v-for="(block, index) in blocks" :key="index">
+    <template v-for="(block, index) in renderBlocks" :key="index">
       <p v-if="block.type === 'paragraph'">{{ block.text }}</p>
 
-      <h2 v-else-if="block.type === 'heading' && block.level === 2">{{ block.text }}</h2>
-      <h3 v-else-if="block.type === 'heading'">{{ block.text }}</h3>
+      <h2 v-else-if="block.type === 'heading' && block.level === 2" :id="block.id">
+        {{ block.text }}
+      </h2>
+      <h3 v-else-if="block.type === 'heading'" :id="block.id">{{ block.text }}</h3>
 
       <blockquote v-else-if="block.type === 'quote'">
         <p>{{ block.text }}</p>
@@ -50,6 +57,11 @@ defineProps({
 
 .prose p {
   margin-block: 1.4em;
+}
+
+.prose h2,
+.prose h3 {
+  scroll-margin-top: 6rem;
 }
 
 .prose h2 {

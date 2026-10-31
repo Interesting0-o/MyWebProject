@@ -1,7 +1,11 @@
 <script setup>
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 
-usePageTitle(() => '页面未找到')
+useSeo(() => ({
+  title: '页面未找到',
+  description: '你访问的页面不存在，或者已经被移动。',
+  robots: 'noindex',
+}))
 </script>
 
 <template>

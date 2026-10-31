@@ -2,6 +2,8 @@ export const site = {
   name: 'KMnO4',
   title: 'KMnO4 的博客',
   description: '记录代码、阅读与生活。',
+  url: 'https://example.com',
+  keywords: ['KMnO4', '博客', '前端开发', 'Vue 3', 'FastAPI', '阅读笔记'],
   hero: {
     eyebrow: 'Personal Blog',
     greeting: '你好，我是',
@@ -20,5 +22,13 @@ export const site = {
     github: 'https://github.com/your-username',
   },
   stack: ['Vue 3', 'Vite', 'JavaScript', 'Python', 'FastAPI', 'MySQL', 'Docker', 'Neovim'],
+  license: {
+    name: 'CC BY-NC-SA 4.0',
+    url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh',
+  },
+  icp: {
+    label: 'ICP 备案号待补充',
+    url: 'https://beian.miit.gov.cn/',
+  },
   startYear: 2025,
 }

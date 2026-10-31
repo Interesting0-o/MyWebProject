@@ -1,8 +1,12 @@
 <script setup>
 import { site } from '@/config/site'
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 
-usePageTitle(() => '关于')
+useSeo(() => ({
+  title: '关于',
+  description: site.author.intro[0],
+  keywords: [site.name, ...site.stack],
+}))
 </script>
 
 <template>

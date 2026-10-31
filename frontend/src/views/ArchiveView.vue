@@ -1,9 +1,13 @@
 <script setup>
-import { usePageTitle } from '@/composables/usePageTitle'
+import { useSeo } from '@/composables/useSeo'
 import { posts } from '@/data/posts'
 import { formatMonthDay, groupPostsByYear } from '@/utils/format'
 
-usePageTitle(() => '归档')
+useSeo(() => ({
+  title: '归档',
+  description: `共 ${posts.length} 篇文章，按时间从新到旧排列。`,
+  keywords: ['归档', '文章归档'],
+}))
 
 const groups = groupPostsByYear(posts)
 </script>
