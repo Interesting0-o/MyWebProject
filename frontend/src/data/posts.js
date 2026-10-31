@@ -1,4 +1,4 @@
-import { estimateReadingTime } from '@/utils/format'
+import { estimateReadingTime } from '../utils/format.js'
 
 const p = (text) => ({ type: 'paragraph', text })
 const h2 = (text) => ({ type: 'heading', level: 2, text })

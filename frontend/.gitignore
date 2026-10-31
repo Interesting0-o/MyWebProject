@@ -41,5 +41,10 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# Generated static files
+public/rss.xml
+public/sitemap.xml
+public/robots.txt
+
 test-results/
 playwright-report/
