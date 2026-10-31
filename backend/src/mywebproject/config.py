@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     )
 
     DATABASE_URL: str = Field(description="MySQL/MariaDB 数据库连接地址")
+    SEED_DATA: bool = Field(default=True, description="首次启动时写入示例文章")
 
 
 @lru_cache

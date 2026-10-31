@@ -8,7 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from mywebproject.api import api_router
 from mywebproject.config import Settings, get_settings
-from mywebproject.db import check_database_connection, close_database_connection
+from mywebproject.db import (
+    check_database_connection,
+    close_database_connection,
+    initialize_database,
+)
 from mywebproject.resource.path import ensure_runtime_dirs
 
 logger = logging.getLogger(__name__)
@@ -17,10 +21,12 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator[None]:
     ensure_runtime_dirs()
+    settings = get_settings()
     try:
         await check_database_connection()
+        await initialize_database(seed=settings.SEED_DATA)
     except Exception:
-        logger.critical("数据库连接失败，服务启动已中止", exc_info=True)
+        logger.critical("数据库初始化失败，服务启动已中止", exc_info=True)
         raise
     try:
         yield

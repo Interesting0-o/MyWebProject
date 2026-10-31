@@ -1,0 +1,6 @@
+import os
+
+os.environ.setdefault(
+    "DATABASE_URL",
+    "mysql+aiomysql://root@127.0.0.1:3306/mywebproject",
+)
