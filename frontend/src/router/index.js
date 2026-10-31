@@ -52,6 +52,16 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('../views/LegalView.vue'),
+    },
+    {
+      path: '/disclaimer',
+      name: 'disclaimer',
+      component: () => import('../views/LegalView.vue'),
+    },
+    {
       path: '/health',
       name: 'health',
       component: () => import('../views/HealthView.vue'),
