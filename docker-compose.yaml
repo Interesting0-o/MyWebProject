@@ -21,6 +21,9 @@ services:
       context: ./frontend
     ports:
       - '80:80'
+    depends_on:
+      backend:
+        condition: service_healthy
     environment:
       BACKEND_API_URL: ${BACKEND_API_URL:-http://backend:8000}
       NGINX_ENVSUBST_FILTER: ^BACKEND_API_URL$
