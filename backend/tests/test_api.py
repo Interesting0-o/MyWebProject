@@ -139,6 +139,40 @@ def test_tags_and_archive() -> None:
     asyncio.run(scenario())
 
 
+def test_comments() -> None:
+    async def scenario() -> None:
+        async with create_test_client() as client:
+            slug = "/api/posts/vue-3-composition-refactor/comments"
+            empty = await client.get(slug)
+            created = await client.post(
+                slug,
+                json={"author_name": "  读者  ", "content": "  很有帮助，感谢分享。  "},
+            )
+            listed = await client.get(slug)
+            missing = await client.get("/api/posts/not-found/comments")
+            invalid = await client.post(
+                slug,
+                json={"author_name": "a", "content": "x"},
+            )
+
+        assert empty.status_code == 200
+        assert empty.json() == []
+
+        assert created.status_code == 201
+        payload = created.json()
+        assert payload["author_name"] == "读者"
+        assert payload["content"] == "很有帮助，感谢分享。"
+        assert payload["created_at"]
+
+        assert listed.status_code == 200
+        assert [item["id"] for item in listed.json()] == [payload["id"]]
+
+        assert missing.status_code == 404
+        assert invalid.status_code == 422
+
+    asyncio.run(scenario())
+
+
 def test_seed_is_idempotent() -> None:
     async def scenario() -> None:
         engine = create_async_engine(

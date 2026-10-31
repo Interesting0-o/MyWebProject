@@ -2,7 +2,18 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from sqlalchemy import JSON, Column, Date, DateTime, ForeignKey, String, Table, func
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    String,
+    Table,
+    func,
+    text,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -41,6 +52,11 @@ class Post(Base):
         lazy="selectin",
         order_by="Tag.name",
     )
+    comments: Mapped[list[Comment]] = relationship(
+        back_populates="post",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
 
 class Tag(Base):
@@ -53,3 +69,28 @@ class Tag(Base):
         secondary=post_tags,
         back_populates="tags",
     )
+
+
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    post_id: Mapped[int] = mapped_column(
+        ForeignKey("posts.id", ondelete="CASCADE"),
+        index=True,
+    )
+    author_name: Mapped[str] = mapped_column(String(40))
+    content: Mapped[str] = mapped_column(String(1000))
+    is_approved: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default=text("1"),
+        index=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        server_default=func.now(),
+        index=True,
+    )
+
+    post: Mapped[Post] = relationship(back_populates="comments")

@@ -39,6 +39,20 @@ CREATE TABLE IF NOT EXISTS post_tags (
     CONSTRAINT fk_post_tags_tag_id FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS comments (
+    id INT NOT NULL AUTO_INCREMENT,
+    post_id INT NOT NULL,
+    author_name VARCHAR(40) NOT NULL,
+    content VARCHAR(1000) NOT NULL,
+    is_approved BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY ix_comments_post_id (post_id),
+    KEY ix_comments_is_approved (is_approved),
+    KEY ix_comments_created_at (created_at),
+    CONSTRAINT fk_comments_post_id FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT IGNORE INTO tags (name) VALUES
     ('Vue'),
     ('前端'),

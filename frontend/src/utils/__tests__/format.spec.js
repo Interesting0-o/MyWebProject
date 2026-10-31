@@ -3,6 +3,7 @@ import {
   estimateReadingTime,
   formatCompactDate,
   formatDate,
+  formatDateTime,
   formatMonthDay,
   groupPostsByYear,
 } from '../format'
@@ -12,6 +13,11 @@ describe('date formatting', () => {
     expect(formatDate('2026-10-24')).toBe('2026 年 10 月 24 日')
     expect(formatCompactDate('2026-01-05')).toBe('2026.01.05')
     expect(formatMonthDay('2026-01-05')).toBe('01.05')
+  })
+
+  it('formats timestamps and tolerates invalid input', () => {
+    expect(formatDateTime('not-a-date')).toBe('not-a-date')
+    expect(formatDateTime('2026-10-24T12:30:00Z')).toContain('2026')
   })
 })
 
