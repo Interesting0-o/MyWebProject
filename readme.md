@@ -1,6 +1,8 @@
 # mywebproject
 
-Vue 3 + FastAPI 全栈个人博客。后端提供文章、标签与归档 API，启动时会自动建表并写入示例文章；前端目前仍使用本地模拟数据，后续可切换为 API 数据源。
+Vue 3 + FastAPI 全栈个人博客。后端提供文章、标签、归档与评论 API，启动时会自动建表并写入示例文章；前端文章目前仍使用本地模拟数据，评论则通过后端接口存储，后续可将文章切换为 API 数据源。
+
+功能规划、已完成项与上线前待替换的配置见 [docs/features.md](docs/features.md)。
 
 ## 技术栈
 
@@ -26,12 +28,15 @@ Vue 3 + FastAPI 全栈个人博客。后端提供文章、标签与归档 API，
 │   ├── tests/               # 后端 API 测试
 │   └── pyproject.toml
 ├── frontend/                # Vue 3 前端
+│   ├── scripts/             # 构建时生成 RSS、sitemap 与 robots
 │   └── src/
 │       ├── components/      # 页头、页脚、文章列表等内容组件
-│       ├── config/site.js   # 站点信息与作者资料
+│       ├── composables/     # 主题、SEO 等组合式逻辑
+│       ├── config/site.js   # 站点信息、作者资料与许可协议
 │       ├── data/posts.js    # 本地模拟文章数据
-│       ├── views/           # 首页、文章、归档、标签、关于等页面
+│       ├── views/           # 首页、文章、归档、标签、搜索等页面
 │       └── router/          # 前端路由
+├── docs/features.md         # 功能清单与待办
 ├── docker-compose.yaml
 ├── init.sql                 # MySQL 数据库初始化
 ├── .env.example             # 环境变量模板
@@ -96,6 +101,8 @@ yarn dev
 | --- | --- | --- |
 | GET | `/api/posts` | 文章列表，支持 `tag`、`q`、`limit`、`offset` |
 | GET | `/api/posts/{slug}` | 文章详情，包含结构化正文区块 |
+| GET | `/api/posts/{slug}/comments` | 文章评论列表 |
+| POST | `/api/posts/{slug}/comments` | 发表评论，提交 `author_name` 与 `content` |
 | GET | `/api/tags` | 标签列表及每个标签的文章数 |
 | GET | `/api/archive` | 按年份分组的文章归档 |
 | GET | `/api/health` | 健康检查 |
@@ -113,6 +120,7 @@ curl 'http://127.0.0.1:8000/api/posts/vue-3-composition-refactor'
 - 应用启动时执行 `Base.metadata.create_all`，作为本地开发时的建表兜底。
 - `SEED_DATA=true` 且文章表为空时，后端会从 `seed_data.py` 写入示例文章。
 - 文章正文以 JSON 区块存储，标签通过多对多关系关联。
+- 评论保存在 `comments` 表中，默认直接展示；可将 `is_approved` 设为 `0` 隐藏单条评论，暂未提供管理后台。
 - `init.sql` 默认创建并使用 `mywebproject` 数据库，需要与 `.env` 的 `DATABASE_NAME` 保持一致；如改用其他库名，请同时修改 `init.sql` 顶部的 `CREATE DATABASE` 和 `USE`。
 - 修改 `init.sql` 后，已有数据卷不会重新执行初始化脚本，需要执行 `docker compose down -v` 后重新启动。
 - 生产环境建议设置 `SEED_DATA=false`，并在后续引入 Alembic 管理数据库迁移。
@@ -126,8 +134,13 @@ curl 'http://127.0.0.1:8000/api/posts/vue-3-composition-refactor'
 | `/archive` | 按年份归档 |
 | `/tags` | 标签列表 |
 | `/tags/:tag` | 标签下的文章 |
+| `/search` | 站内搜索与标签筛选 |
 | `/about` | 关于 |
+| `/privacy` | 隐私政策 |
+| `/disclaimer` | 免责声明 |
 | `/health` | 后端连接测试（不在导航中显示） |
+
+`yarn dev` 和 `yarn build` 会先执行 `scripts/generate-static.js`，根据文章数据生成 `public/rss.xml`、`public/sitemap.xml` 和 `public/robots.txt`。生成内容依赖 `src/config/site.js` 中的 `url`，上线前请替换为正式域名。
 
 ## 常用命令
 
