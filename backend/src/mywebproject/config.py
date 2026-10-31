@@ -26,7 +26,7 @@ class Settings(BaseSettings):
         default=["http://localhost:5173"], description="允许跨域的前端地址"
     )
 
-    DATABASE_URL: str = Field(description="MySQL 数据库连接地址")
+    DATABASE_URL: str = Field(description="MySQL/MariaDB 数据库连接地址")
 
 
 @lru_cache

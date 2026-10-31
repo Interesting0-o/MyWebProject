@@ -6,10 +6,12 @@ readme = "README.md"
 authors = [{ name = "Interesting0_o", email = "2597256916@qq.com" }]
 requires-python = ">=3.13"
 dependencies = [
+    "aiomysql>=0.3.2",
     "fastapi>=0.162.0",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.2",
     "pytest>=9.2.0",
+    "sqlalchemy[asyncio]>=2.1.6",
     "uvicorn>=0.54.0",
 ]
 
