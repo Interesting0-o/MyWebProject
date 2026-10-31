@@ -14,7 +14,8 @@ services:
       DEBUG: ${DEBUG}
       BACKEND_PORT: ${BACKEND_PORT}
       CORS_ORIGINS: ${CORS_ORIGINS}
-      DATABASE_URL: ${DATABASE_URL:-mysql+aiomysql://root:change-me@db:3306/mywebproject}
+      SEED_DATA: ${SEED_DATA:-true}
+      DATABASE_URL: mysql+aiomysql://root:${DATABASE_ROOT_PWD:-change-me}@db:3306/${DATABASE_NAME:-mywebproject}?charset=utf8mb4
   frontend:
     build:
       context: ./frontend
@@ -24,10 +25,15 @@ services:
       BACKEND_API_URL: ${BACKEND_API_URL:-http://backend:8000}
       NGINX_ENVSUBST_FILTER: ^BACKEND_API_URL$
   db:
-    image: mysql
+    image: mysql:8.4
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - '3306:3306'
     environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PWD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PWD:-change-me}
+      MYSQL_DATABASE: ${DATABASE_NAME:-mywebproject}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
