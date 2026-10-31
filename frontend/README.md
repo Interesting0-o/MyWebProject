@@ -1,69 +1,28 @@
 # frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+个人博客前端，基于 Vue 3、Vite 与 Vue Router。
 
-## Recommended IDE Setup
+## 页面
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- `/` 首页与最新文章
+- `/posts/:slug` 文章详情
+- `/archive` 按年份归档
+- `/tags` 标签列表
+- `/tags/:tag` 标签下的文章
+- `/about` 关于
+- `/health` 后端连接测试（不在导航中显示）
 
-## Recommended Browser Setup
+## 数据
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+文章目前来自 `src/data/posts.js`，站点与作者信息在 `src/config/site.js` 中维护。接入后端后，可以将数据读取替换为 API 请求。
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## 常用命令
 
 ```sh
-yarn
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-yarn dev
-```
-
-### Compile and Minify for Production
-
-```sh
-yarn build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-yarn test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-yarn build
-
-# Runs the end-to-end tests
-yarn test:e2e
-# Runs the tests only on Chromium
-yarn test:e2e --project=chromium
-# Runs the tests of a specific file
-yarn test:e2e tests/example.spec.ts
-# Runs the tests in debug mode
-yarn test:e2e --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-yarn lint
+yarn dev        # 开发服务器
+yarn build      # 生产构建
+yarn test:unit  # 单元测试
+yarn test:e2e   # 端到端测试（首次需 npx playwright install）
+yarn lint       # 代码检查
+yarn format     # 格式化 src/
 ```

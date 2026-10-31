@@ -3,6 +3,18 @@ import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    if (to.hash) {
+      return { el: to.hash, top: 88, behavior: 'smooth' }
+    }
+    if (to.path !== from.path) {
+      return { top: 0 }
+    }
+    return undefined
+  },
   routes: [
     {
       path: '/',
@@ -10,12 +22,39 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/posts/:slug',
+      name: 'post',
+      component: () => import('../views/PostView.vue'),
+    },
+    {
+      path: '/archive',
+      name: 'archive',
+      component: () => import('../views/ArchiveView.vue'),
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: () => import('../views/TagsView.vue'),
+    },
+    {
+      path: '/tags/:tag',
+      name: 'tag',
+      component: () => import('../views/TagView.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/health',
+      name: 'health',
+      component: () => import('../views/HealthView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
     },
   ],
 })

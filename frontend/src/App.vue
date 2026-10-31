@@ -1,38 +1,19 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import SiteFooter from '@/components/SiteFooter.vue'
+import SiteHeader from '@/components/SiteHeader.vue'
 </script>
 
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">连接测试</RouterLink>
-      <RouterLink to="/about">关于</RouterLink>
-    </nav>
-  </header>
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <SiteHeader />
 
-  <RouterView />
+  <main id="main-content">
+    <RouterView v-slot="{ Component, route }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" :key="route.path" />
+      </Transition>
+    </RouterView>
+  </main>
+
+  <SiteFooter />
 </template>
-
-<style scoped>
-header {
-  padding: 1.5rem 0;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-nav {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-nav a {
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-}
-
-nav a.router-link-exact-active {
-  color: #fff;
-  background-color: hsla(160, 100%, 37%, 1);
-}
-</style>

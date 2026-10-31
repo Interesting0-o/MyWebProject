@@ -33,63 +33,70 @@ async function testConnection() {
 
 <template>
   <section class="backend-tester">
-    <h1>后端连接测试</h1>
-    <p class="endpoint">GET /api/health</p>
-
-    <button type="button" :disabled="loading" @click="testConnection">
-      {{ loading ? '请求中...' : '测试连接' }}
-    </button>
+    <div class="tester-header">
+      <div>
+        <h2>后端连接测试</h2>
+        <p class="endpoint">GET /api/health</p>
+      </div>
+      <button type="button" :disabled="loading" @click="testConnection">
+        {{ loading ? '请求中...' : '测试连接' }}
+      </button>
+    </div>
 
     <p v-if="loading" class="status">正在请求后端...</p>
-    <p v-else-if="error" class="status error">连接失败：{{ error }}</p>
-    <div v-else-if="result" class="status success">
+    <p v-else-if="error" class="status status--error">连接失败：{{ error }}</p>
+    <div v-else-if="result" class="status status--success">
       <p>连接成功，耗时 {{ elapsed }} ms</p>
       <pre>{{ JSON.stringify(result, null, 2) }}</pre>
     </div>
-    <p v-else class="status hint">点击按钮向后端发送一次请求</p>
+    <p v-else class="status status--hint">点击按钮向后端发送一次请求</p>
   </section>
 </template>
 
 <style scoped>
 .backend-tester {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding: 1.75rem;
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background-color: var(--color-background-soft);
-  text-align: center;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
-h1 {
-  margin-bottom: 0.5rem;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-heading);
+.tester-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+h2 {
+  font-size: 1.15rem;
 }
 
 .endpoint {
-  margin-bottom: 1.5rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  opacity: 0.75;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-faint);
 }
 
 button {
-  padding: 0.6rem 1.6rem;
-  border: none;
-  border-radius: 8px;
-  background-color: hsla(160, 100%, 37%, 1);
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  flex-shrink: 0;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-bg);
+  background-color: var(--color-text);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 button:hover:not(:disabled) {
-  opacity: 0.85;
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
 }
 
 button:disabled {
@@ -99,25 +106,36 @@ button:disabled {
 
 .status {
   margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-soft);
 }
 
-.status.error {
-  color: #d9534f;
+.status--error {
+  color: #c2413b;
 }
 
-.status.success {
-  text-align: left;
+.status--success p {
+  color: var(--color-accent);
 }
 
-.status.success > p {
-  text-align: center;
-}
-
-.status.success pre {
-  margin-top: 0.75rem;
+.status--success pre {
   padding: 1rem;
-  border-radius: 8px;
-  background-color: var(--color-background-mute);
+  margin-top: 0.75rem;
   overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-code-text);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+}
+
+.status--hint {
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 560px) {
+  .tester-header {
+    flex-direction: column;
+  }
 }
 </style>
