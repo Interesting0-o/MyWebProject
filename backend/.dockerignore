@@ -1,0 +1,12 @@
+# virual environment
+.venv/
+venv/
+
+# python cache
+__pycache__/
+.pytest_cache
+
+# python runtime
+data/
+logs/
+
